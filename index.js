@@ -5,7 +5,17 @@ const app = express();
 const path = require("path");
 const upload_router = require("./router/upload_router");
 const fetch_router = require("./router/fetch_router")
+const mongoose = require("mongoose");
+mongoose.connect(process.env.MONGOURI);
+  let db = mongoose.connection;
+  db.once("open", () => {
+    console.log("Connected to MongoDB");
+  });
+  db.on("error", (err) => {
+    console.error("DB Error:" + err);
+  });
 
+  
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -27,10 +37,7 @@ app.get("/gallery-pagination", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "gallery-pagination.html"));
 });
 
-// Handle 404
-app.use((req, res) => {
-  res.status(404).send("Route does not exist on our server");
-});
+
 
 app.get("/fetch-random", (req, res) => {
   res.sendFile(path.join(__dirname, "/views/fetch-random.html"));
@@ -39,16 +46,12 @@ app.get("/fetch-multiple-random", (req, res) => {
   res.sendFile(path.join(__dirname, "/views/fetch-multiple-random.html"));
 });
 
-const mongoose = require("mongoose");
-mongoose.connect(process.env.MONGOURI);
-  let db = mongoose.connection;
-  db.once("open", () => {
-    console.log("Connected to MongoDB");
-  });
-  db.on("error", (err) => {
-    console.error("DB Error:" + err);
-  });
 
+
+  // Handle 404
+app.use((req, res) => {
+  res.status(404).send("Route does not exist on our server");
+});
 
 // Start the server
 app.listen(PORT, () => {

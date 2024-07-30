@@ -13,12 +13,7 @@ router
   .get((req, res) => {
     res.sendFile(path.join(__dirname, "../views/upload.html"));
   })
-  .post(upload.single("file"), (req, res) => {
-    if (!req.file) {
-      return res.status(400).send("No file uploaded.");
-    }
-    res.send(`File uploaded successfully: ${req.file.path}`);
-  });
+  
 
 // Upload multiple files
 router
