@@ -39,6 +39,16 @@ app.get("/fetch-multiple-random", (req, res) => {
   res.sendFile(path.join(__dirname, "/views/fetch-multiple-random.html"));
 });
 
+const mongoose = require("mongoose");
+mongoose.connect(process.env.MONGOURI);
+  let db = mongoose.connection;
+  db.once("open", () => {
+    console.log("Connected to MongoDB");
+  });
+  db.on("error", (err) => {
+    console.error("DB Error:" + err);
+  });
+
 
 // Start the server
 app.listen(PORT, () => {
