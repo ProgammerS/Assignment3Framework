@@ -5,6 +5,7 @@ const path = require("path");
 const multer = require("multer");
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
+const Image = require("../model/image.js")
 
 // Upload single file
 router
